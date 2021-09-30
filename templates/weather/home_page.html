@@ -5,5 +5,13 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Hello, Maral</h1>
+    <h1>What about the weather?</h1>
+    <form class="form-select my-5 p-2" method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-dark justify-content-end">Select</button>
+    </form>
+    {% for i in  weather%}
+        <h1>{{ i }}</h1>
+    {% endfor %}
+
 {% endblock %}
