@@ -2,7 +2,7 @@ from django import forms
 
 
 class CityForm(forms.Form):
-    city = forms.CharField()
+    city = forms.CharField(required=True)
 
 
 class ArchiveForm(forms.Form):
