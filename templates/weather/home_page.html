@@ -11,18 +11,11 @@
 {% endblock %}
 
 {% block content %}
-    <h1>What about the weather?</h1>
-    <form class="form my-5 p-2" method="post">{% csrf_token %}
+    <h1 class="text-center">What about the weather?</h1>
+    <form class="form text-center my-5 p-2" method="post">{% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-dark justify-content-end">Select</button>
     </form>
-{#    {{ weather.city_name }}#}
-{#    {{ weather.country_code }}#}
-{#    {{ weather.weather_description }}#}
-{#    {{ weather.temp }}#}
-{#    {{ weather.temp_feels_like }}#}
-{#    {{ weather.temp_min }}#}
-{#    {{ weather.temp_max }}#}
     {% if weather %}
         <div class="card text-center mx-5">
             <div class="card-header">
@@ -32,10 +25,10 @@
                 <h1 class="card-title">{{ weather.weather_description }}</h1>
                 <h2 class="card-text">Feels like: <i class="bi bi-thermometer"></i>{{ weather.temp_feels_like }}</h2>
                 <h4 class="card-text" style="font-family: cursive">
-                    Min<i class="bi bi-thermometer"></i>{{ weather.temp_min }}
+                    min<i class="bi bi-thermometer"></i>{{ weather.temp_min }}
                     <span style="font-size: 45px; color: green"><i class="bi bi-thermometer"></i>{{ weather.temp }}</span>
 
-                    Max<i class="bi bi-thermometer"></i>{{ weather.temp_max }}
+                    max<i class="bi bi-thermometer"></i>{{ weather.temp_max }}
                 </h4>
             </div>
                 <div class="card-footer text-muted">
