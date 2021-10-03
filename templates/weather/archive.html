@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Archive
+{% endblock %}
+
+{% block content %}
+    <h1>Weather history</h1>
+    <form class="form my-5 p-2" method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-dark justify-content-end">Select</button>
+    </form>
+    <table class="table table-dark table-striped">
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">City name</th>
+          <th scope="col">Country code</th>
+          <th scope="col">Temperature °C</th>
+          <th scope="col">Feels like °C</th>
+          <th scope="col">Max temperature °C</th>
+          <th scope="col">Min temperature °C</th>
+          <th scope="col">Date</th>
+        </tr>
+      </thead>
+      <tbody>
+          {% for city_weather in page_obj %}
+              <tr>
+                  <th scope="row">{{ page_obj.start_index|add:forloop.counter|add:-1 }}</th>
+                  <td>{{ city_weather.city_name }}</td>
+                  <td>{{ city_weather.country_code }}</td>
+                  <td>{{ city_weather.temp }}</td>
+                  <td>{{ city_weather.temp_feels_like }}</td>
+                  <td>{{ city_weather.temp_max }}</td>
+                  <td>{{ city_weather.temp_min }}</td>
+                  <td>{{ city_weather.date }}</td>
+              </tr>
+          {% endfor %}
+      </tbody>
+    </table>
+    <div class="pagination">
+        <span class="step_links">
+            {% if page_obj.has_previous %}
+                <a href="{{ url_params }}&page=1">&laquo; first</a>
+                <a href="{{ url_params }}&page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+            {% if page_obj.has_next %}
+                <a href="{{ url_params }}&page={{ page_obj.next_page_number }}">next</a>
+                <a href="{{ url_params }}&page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+{% endblock %}

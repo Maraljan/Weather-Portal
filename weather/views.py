@@ -1,6 +1,11 @@
-from django.views.generic import TemplateView, FormView
+from django.db.models import QuerySet
+from django.utils.dateparse import parse_date
+from django.shortcuts import redirect
+from django.views.generic import FormView, ListView
 
-from weather.forms import CityForm
+from utils import add_url_params
+from weather.forms import CityForm, ArchiveForm
+from weather.models import CityWeatherInfo
 from weather.services.open_weather_map import OpenWeatherClient
 
 
@@ -19,3 +24,36 @@ class HomePageView(FormView):
         weather = self.client_weather.parse_weather(raw_weather)
         weather.save()
         return self.render_to_response(self.get_context_data(weather=weather))
+
+
+class ArchiveView(FormView, ListView):
+
+    template_name = 'weather/archive.html'
+    form_class = ArchiveForm
+    model = CityWeatherInfo
+    context_object_name = 'city_weathers'
+    paginate_by = 5
+
+    def form_valid(self, form: ArchiveForm):
+        response = redirect('weather:archive')
+        response['Location'] = add_url_params(response['Location'], form.cleaned_data)
+        return response
+
+    def get_queryset(self) -> QuerySet[CityWeatherInfo]:
+        queryset = super().get_queryset()
+        if city := self.request.GET.get('city'):
+            queryset = queryset.filter(city_name__iexact=city)
+        if date_to := self.request.GET.get('date_to'):
+            queryset = queryset.filter(date__lte=parse_date(date_to))
+        if date_from := self.request.GET.get('date_from'):
+            queryset = queryset.filter(date__gte=parse_date(date_from))
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['url_params'] = add_url_params('', {
+            'city': self.request.GET.get('city'),
+            'date_to': self.request.GET.get('date_to'),
+            'date_from': self.request.GET.get('date_from'),
+        })
+        return context
