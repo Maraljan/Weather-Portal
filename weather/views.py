@@ -1,4 +1,3 @@
-from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView, FormView
 
 from weather.forms import CityForm
@@ -16,5 +15,6 @@ class HomePageView(FormView):
 
     def form_valid(self, form: CityForm):
         name_city = form.cleaned_data['city']
-        weather = self.client_weather.get_city_weather(name_city)
+        raw_weather = self.client_weather.get_city_weather(name_city)
+        weather = self.client_weather.parse_weather(raw_weather)
         return self.render_to_response(self.get_context_data(weather=weather))

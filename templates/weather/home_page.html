@@ -10,8 +10,12 @@
         {{ form.as_p }}
         <button type="submit" class="btn btn-dark justify-content-end">Select</button>
     </form>
-    {% for i in  weather%}
-        <h1>{{ i }}</h1>
-    {% endfor %}
+    {{ weather.city_name }}
+    {{ weather.country_code }}
+    {{ weather.weather_description }}
+    {{ weather.temp }}
+    {{ weather.temp_feels_like }}
+    {{ weather.temp_min }}
+    {{ weather.temp_max }}
 
 {% endblock %}
