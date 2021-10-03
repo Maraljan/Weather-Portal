@@ -17,4 +17,5 @@ class HomePageView(FormView):
         name_city = form.cleaned_data['city']
         raw_weather = self.client_weather.get_city_weather(name_city)
         weather = self.client_weather.parse_weather(raw_weather)
+        weather.save()
         return self.render_to_response(self.get_context_data(weather=weather))
