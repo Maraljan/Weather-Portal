@@ -38,19 +38,24 @@
           {% endfor %}
       </tbody>
     </table>
-    <div class="pagination">
-        <span class="step_links">
+
+    <div>
+        <div>
             {% if page_obj.has_previous %}
-                <a href="{{ url_params }}&page=1">&laquo; first</a>
-                <a href="{{ url_params }}&page={{ page_obj.previous_page_number }}">previous</a>
+                <a class="btn btn-outline-dark" href="{{ url_params }}&page=1">first<i class="bi bi-caret-left-fill"></i></a>
+                <a class="btn btn-outline-dark" href="{{ url_params }}&page={{ page_obj.previous_page_number }}">
+                    <i class="bi bi-arrow-left-circle-fill"></i>
+                </a>
             {% endif %}
-            <span class="current">
+            <span class="current" style="font-family: 'Comic Sans MS',monospace">
                 Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
             </span>
             {% if page_obj.has_next %}
-                <a href="{{ url_params }}&page={{ page_obj.next_page_number }}">next</a>
-                <a href="{{ url_params }}&page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                <a class="btn btn-outline-dark" href="{{ url_params }}&page={{ page_obj.next_page_number }}">
+                    <i class="bi bi-arrow-right-circle-fill"></i>
+                </a>
+                <a class="btn btn-outline-dark" href="{{ url_params }}&page={{ page_obj.paginator.num_pages }}">last<i class="bi bi-caret-right-fill"></i></i></a>
             {% endif %}
-        </span>
+        </div>
     </div>
 {% endblock %}
