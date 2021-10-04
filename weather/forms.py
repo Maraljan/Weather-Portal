@@ -7,5 +7,5 @@ class CityForm(forms.Form):
 
 class ArchiveForm(forms.Form):
     city = forms.CharField(required=False)
-    date_from = forms.DateField(required=False)
-    date_to = forms.DateField(required=False)
+    date_from = forms.DateField(required=False, help_text='yyyy-mm-dd')
+    date_to = forms.DateField(required=False, help_text='yyyy-mm-dd')

@@ -2,6 +2,10 @@ from django.db import models
 
 
 class CityWeatherInfo(models.Model):
+
+    class Meta:
+        unique_together = [('city_name', 'date')]
+
     city_name = models.CharField(max_length=30)
     date = models.DateField(auto_now_add=True)
     country_code = models.CharField(max_length=30)

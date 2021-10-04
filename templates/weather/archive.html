@@ -8,6 +8,7 @@
 {% block content %}
     <h1 class="text-center">Weather archive</h1>
     <form class="form my-5 p-2" method="post">{% csrf_token %}
+        <h4>Filter</h4>
         {% bootstrap_form form %}
         <button type="submit" class="btn btn-dark justify-content-end">Select</button>
     </form>

@@ -1,12 +1,14 @@
+from django.db import IntegrityError
 from django.db.models import QuerySet
 from django.utils.dateparse import parse_date
 from django.shortcuts import redirect
+from django.utils import timezone
 from django.views.generic import FormView, ListView
 
 from utils import add_url_params
 from weather.forms import CityForm, ArchiveForm
 from weather.models import CityWeatherInfo
-from weather.services.open_weather_map import OpenWeatherClient
+from weather.services.open_weather_map import OpenWeatherClient, OpenWeatherError
 
 
 class HomePageView(FormView):
@@ -20,10 +22,25 @@ class HomePageView(FormView):
 
     def form_valid(self, form: CityForm):
         name_city = form.cleaned_data['city']
-        raw_weather = self.client_weather.get_city_weather(name_city)
+        error = None
+        weather = None
+        try:
+            weather = CityWeatherInfo.objects.get(city_name__iexact=name_city, date=timezone.now().date())
+        except CityWeatherInfo.DoesNotExist:
+            try:
+                weather = self._get_weather(name_city)
+            except OpenWeatherError:
+                error = 'Could not get information about weather.'
+        return self.render_to_response(self.get_context_data(weather=weather, error=error))
+
+    def _get_weather(self, city: str) -> CityWeatherInfo:
+        raw_weather = self.client_weather.get_city_weather(city)
         weather = self.client_weather.parse_weather(raw_weather)
-        weather.save()
-        return self.render_to_response(self.get_context_data(weather=weather))
+        try:
+            weather.save()
+        except IntegrityError:
+            pass
+        return weather
 
 
 class ArchiveView(FormView, ListView):

@@ -17,6 +17,11 @@
         {% bootstrap_form form %}
         <button type="submit" class="btn btn-dark justify-content-end">Select</button>
     </form>
+
+    {% if error %}
+        <h3 class="alert-danger">{{ error }}</h3>
+    {% endif %}
+
     {% if weather %}
         <div class="card text-center mx-5">
             <div class="card-header">
