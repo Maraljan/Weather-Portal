@@ -40,6 +40,7 @@ class OpenWeatherClient:
             temp_feels_like = weather["main"]["feels_like"]
             temp_max = weather["main"]["temp_max"]
             temp_min = weather["main"]["temp_min"]
+            icon = weather['weather'][0]["icon"]
         except (KeyError, IndexError):
             raise OpenWeatherError('Parsing weather failed.')
 
@@ -51,6 +52,7 @@ class OpenWeatherClient:
             temp_feels_like=temp_feels_like,
             temp_min=temp_min,
             temp_max=temp_max,
+            icon=icon,
         )
 
 

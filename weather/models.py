@@ -14,3 +14,4 @@ class CityWeatherInfo(models.Model):
     temp_feels_like = models.FloatField()
     temp_min = models.FloatField()
     temp_max = models.FloatField()
+    icon = models.CharField(max_length=30)
