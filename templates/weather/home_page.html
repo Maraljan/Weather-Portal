@@ -29,8 +29,8 @@
             </div>
             <div class="card-body">
                 <h1 class="card-title">
-                    {{ weather.weather_description.capitalize }}
-                    <img src="http://openweathermap.org/img/w/{{ weather.icon }}.png" alt="Image" style="width:60px">
+                    {{ weather.weather_description|capfirst }}
+                    {{ weather.icon_preview }}
                 </h1>
                 <h2 class="card-text">
                     Feels like: <i class="bi bi-thermometer"></i>{{ weather.temp_feels_like }}

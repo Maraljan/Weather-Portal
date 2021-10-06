@@ -1,8 +1,8 @@
 from django.db import models
+from django.utils.safestring import mark_safe
 
 
 class CityWeatherInfo(models.Model):
-
     class Meta:
         unique_together = [('city_name', 'date')]
 
@@ -14,4 +14,8 @@ class CityWeatherInfo(models.Model):
     temp_feels_like = models.FloatField()
     temp_min = models.FloatField()
     temp_max = models.FloatField()
-    icon = models.CharField(max_length=30)
+    icon = models.CharField(max_length=20)
+
+    @property
+    def icon_preview(self):
+        return mark_safe(f'<img src="http://openweathermap.org/img/w/{self.icon}.png" alt="Image" style="width:60px">')
