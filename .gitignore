@@ -1,4 +1,5 @@
 .idea
 venv
 
+weather_portal_mysql.cnf
 db.sqlite3
