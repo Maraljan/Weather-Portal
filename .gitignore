@@ -1,5 +1,6 @@
 .idea
 venv
 
+weather_portal_postgres.cnf
 weather_portal_mysql.cnf
 db.sqlite3
