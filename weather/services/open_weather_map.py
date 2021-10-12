@@ -30,13 +30,17 @@ class OpenWeatherClient:
         except (json.JSONDecodeError, HTTPError):
             raise OpenWeatherError('Failed to fetch weather')
         forecast_5days = []
-        for weather in result['list']:
-            forecasts_current_time = {}
-            forecasts_current_time['temperature'] = weather['main']['temp']
-            forecasts_current_time['description'] = weather['weather'][0]['description']
-            forecasts_current_time['icon'] = weather['weather'][0]['icon']
-            forecasts_current_time['date'] = weather['dt_txt'][:-3]
-            forecast_5days.append(forecasts_current_time)
+        try:
+            for weather in result['list']:
+                forecasts_current_time = {
+                    'temperature': weather['main']['temp'],
+                    'description': weather['weather'][0]['description'],
+                    'icon': weather['weather'][0]['icon'],
+                    'date': weather['dt_txt'][:-3]
+                }
+                forecast_5days.append(forecasts_current_time)
+        except (KeyError, IndexError):
+            raise OpenWeatherError('Parsing weather failed.')
         return forecast_5days
 
     def get_city_weather(self, city: str) -> dict:
