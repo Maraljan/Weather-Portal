@@ -8,11 +8,15 @@ from weather_portal.settings import OPEN_WEATHER_API_KEY, OPEN_WEATHER_URL, FORE
 
 
 class OpenWeatherError(Exception):
-    pass
+    """
+    Exception for all errors in OpenWeatherAPI.
+    """
 
 
 class OpenWeatherClient:
-
+    """
+    Client for OpenWeatherAPI.
+    """
     def __init__(self):
         self._api_key = OPEN_WEATHER_API_KEY
         if OPEN_WEATHER_API_KEY is None:
@@ -20,6 +24,9 @@ class OpenWeatherClient:
         self._session = requests.Session()
 
     def get_weather_forecast(self, city) -> list:
+        """
+        Get Forecast for 5 days with 3 hour step.
+        """
         try:
             response = self._session.get(FORECAST_WEATHER_URL, params={'q': city, 'appid': self._api_key, 'units': 'metric'})
         except requests.exceptions.ConnectionError:
@@ -44,6 +51,9 @@ class OpenWeatherClient:
         return forecast_5days
 
     def get_city_weather(self, city: str) -> dict:
+        """
+        Get current weather.
+        """
         try:
             response = self._session.get(OPEN_WEATHER_URL, params={'q': city, 'appid': self._api_key, 'units': 'metric'})
         except requests.exceptions.ConnectionError:
@@ -57,6 +67,9 @@ class OpenWeatherClient:
 
     @staticmethod
     def parse_weather(weather: dict) -> CityWeatherInfo:
+        """
+        Convert weather json.
+        """
         try:
             country_code = weather['sys']['country']
             city_name = weather['name']

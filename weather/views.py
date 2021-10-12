@@ -3,7 +3,7 @@ from django.db.models import QuerySet
 from django.utils.dateparse import parse_date
 from django.shortcuts import redirect
 from django.utils import timezone
-from django.views.generic import FormView, ListView, TemplateView
+from django.views.generic import FormView, ListView
 
 from utils import add_url_params
 from weather.forms import CityForm, ArchiveForm, ForecastForm
@@ -53,7 +53,7 @@ class ArchiveView(FormView, ListView):
 
     def form_valid(self, form: ArchiveForm):
         """
-
+        Redirect to Archive page. Add to url parameters from form.
         """
         response = redirect('weather:archive')
         response['Location'] = add_url_params(response[ 'Location'], form.cleaned_data)
@@ -70,6 +70,9 @@ class ArchiveView(FormView, ListView):
         return queryset
 
     def get_context_data(self, **kwargs):
+        """
+        Add url params for pagination to keep filtering.
+        """
         context = super().get_context_data(**kwargs)
         context['url_params'] = add_url_params('', {
             'city': self.request.GET.get('city'),
