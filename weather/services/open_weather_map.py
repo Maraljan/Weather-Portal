@@ -1,9 +1,10 @@
 import json
+
 import requests
-from requests.exceptions import ConnectionError, HTTPError
+from requests.exceptions import HTTPError
 
 from weather.models import CityWeatherInfo
-from weather_portal.settings import OPEN_WEATHER_API_KEY, OPEN_WEATHER_URL
+from weather_portal.settings import OPEN_WEATHER_API_KEY, OPEN_WEATHER_URL, FORECAST_WEATHER_URL
 
 
 class OpenWeatherError(Exception):
@@ -17,6 +18,20 @@ class OpenWeatherClient:
         if OPEN_WEATHER_API_KEY is None:
             raise ValueError('Api key not found')
         self._session = requests.Session()
+
+    def get_weather_forecast(self, city) -> list:
+        response = self._session.get(FORECAST_WEATHER_URL, params={'q': city, 'appid': self._api_key, 'units': 'metric'})
+        response.raise_for_status()
+        result = response.json()
+        forecast_5days = []
+        for weather in result['list']:
+            forecasts_current_time = {}
+            forecasts_current_time['temperature'] = weather['main']['temp']
+            forecasts_current_time['description'] = weather['weather'][0]['description']
+            forecasts_current_time['icon'] = weather['weather'][0]['icon']
+            forecasts_current_time['date'] = weather['dt_txt'][:-3]
+            forecast_5days.append(forecasts_current_time)
+        return forecast_5days
 
     def get_city_weather(self, city: str) -> dict:
         try:
@@ -58,4 +73,5 @@ class OpenWeatherClient:
 
 if __name__ == '__main__':
     weather_ = OpenWeatherClient()
-    print(weather_.get_city_weather('Kiev'))
+    print(weather_.get_weather_forecast('ashgabat'))
+

@@ -67,18 +67,18 @@ WSGI_APPLICATION = 'weather_portal.wsgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
         # 'ENGINE': 'django.db.backends.mysql',
         # 'OPTIONS': {
         #     'read_default_file': 'weather_portal_mysql.cnf',
         # },
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'weather_portal',
-        'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': 'localhost',
-        'PORT': 5432,
+        # 'ENGINE': 'django.db.backends.postgresql',
+        # 'NAME': 'weather_portal',
+        # 'USER': 'root',
+        # 'PASSWORD': 'root',
+        # 'HOST': 'localhost',
+        # 'PORT': 5432,
     },
 }
 
@@ -128,3 +128,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Open weather api
 OPEN_WEATHER_API_KEY = os.getenv('OPEN_WEATHER_API_KEY')
 OPEN_WEATHER_URL = f'https://api.openweathermap.org/data/2.5/weather'
+FORECAST_WEATHER_URL = f'https://api.openweathermap.org/data/2.5/forecast'

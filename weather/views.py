@@ -3,10 +3,10 @@ from django.db.models import QuerySet
 from django.utils.dateparse import parse_date
 from django.shortcuts import redirect
 from django.utils import timezone
-from django.views.generic import FormView, ListView
+from django.views.generic import FormView, ListView, TemplateView
 
 from utils import add_url_params
-from weather.forms import CityForm, ArchiveForm
+from weather.forms import CityForm, ArchiveForm, ForecastForm
 from weather.models import CityWeatherInfo
 from weather.services.open_weather_map import OpenWeatherClient, OpenWeatherError
 
@@ -52,8 +52,11 @@ class ArchiveView(FormView, ListView):
     paginate_by = 5
 
     def form_valid(self, form: ArchiveForm):
+        """
+
+        """
         response = redirect('weather:archive')
-        response['Location'] = add_url_params(response['Location'], form.cleaned_data)
+        response['Location'] = add_url_params(response[ 'Location'], form.cleaned_data)
         return response
 
     def get_queryset(self) -> QuerySet[CityWeatherInfo]:
@@ -74,3 +77,17 @@ class ArchiveView(FormView, ListView):
             'date_from': self.request.GET.get('date_from'),
         })
         return context
+
+
+class ForecastView(FormView):
+    template_name = 'weather/forecast.html'
+    form_class = ForecastForm
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.client_weather = OpenWeatherClient()
+
+    def form_valid(self, form: ForecastForm):
+        name_city = form.cleaned_data['city']
+        weather = self.client_weather.get_weather_forecast(name_city)
+        return self.render_to_response(self.get_context_data(weather=weather))

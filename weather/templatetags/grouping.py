@@ -1,16 +1,9 @@
-from typing import Optional
+from django import template
+
+register = template.Library()
 
 
-def add_url_params(url: str, params: dict[str, Optional[str]]) -> str:
-    """Helps for combining parameters with url."""
-    result = (
-        f'{key}={value}'
-        for key, value in params.items()
-        if value
-    )
-    return f"{url}?{'&'.join(result)}"
-
-
+@register.filter(name='grouping_by_n')
 def group_by_n(list_: list, n: int) -> list[list]:
     result = []
     temporary_list = []
@@ -22,6 +15,3 @@ def group_by_n(list_: list, n: int) -> list[list]:
     if temporary_list:
         result.append(temporary_list)
     return result
-
-
-print(group_by_n([4, 5, 8, 9, 8, 5], 4))
