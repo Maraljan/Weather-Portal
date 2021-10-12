@@ -20,9 +20,15 @@ class OpenWeatherClient:
         self._session = requests.Session()
 
     def get_weather_forecast(self, city) -> list:
-        response = self._session.get(FORECAST_WEATHER_URL, params={'q': city, 'appid': self._api_key, 'units': 'metric'})
-        response.raise_for_status()
-        result = response.json()
+        try:
+            response = self._session.get(FORECAST_WEATHER_URL, params={'q': city, 'appid': self._api_key, 'units': 'metric'})
+        except requests.exceptions.ConnectionError:
+            raise OpenWeatherError('Connection with OpenWeatherAPI was failed')
+        try:
+            response.raise_for_status()
+            result = response.json()
+        except (json.JSONDecodeError, HTTPError):
+            raise OpenWeatherError('Failed to fetch weather')
         forecast_5days = []
         for weather in result['list']:
             forecasts_current_time = {}
